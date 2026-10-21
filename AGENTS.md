@@ -77,7 +77,7 @@ src/components/home/feature-grid/Card.astro
 
 ## Styling
 
-- Plain CSS. Design tokens (colors, type scale, spacing, radii, motion) and base element styles live in `src/styles/global.css`.
+- Plain CSS. Design tokens (colors, type scale, spacing, radii, motion) and base element styles live in `src/assets/css/global.css`.
 - Component styles go in the component's scoped `<style>` and use the tokens (`var(--color-primary)`). Do not hard-code a value that a token covers. A value that repeats across components becomes a new token.
 - Wrap content in `.container` for the standard width and side padding.
 - Fonts live in `src/assets/fonts/` and are imported in `Layout.astro`.

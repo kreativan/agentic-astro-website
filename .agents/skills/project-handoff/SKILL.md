@@ -40,7 +40,7 @@ Before writing anything, inventory what was actually built:
   Include components from any npm package the site imports.
 - **Tokens:** colors, font families, type scale, spacing, radii, shadows,
   breakpoints, container widths, z-index, transitions. Start with the `:root`
-  tokens in `src/styles/global.css`, then look for any defined elsewhere: other
+  tokens in `src/assets/css/global.css`, then look for any defined elsewhere: other
   CSS custom properties, Tailwind `@theme` or config, SCSS variables, and
   stylesheets carried over from a converted site. Remove starter tokens the
   site never uses, and ask before deleting anything else.

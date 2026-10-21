@@ -5,7 +5,7 @@ An Astro 7 starter for marketing sites, set up to be built and maintained with A
 ## What's included
 
 - **Layout and SEO:** `Layout.astro` renders the head, header, `<main>` and footer. `Meta.astro` handles the title, description, canonical URL, Open Graph, Twitter card, robots and favicons.
-- **Styles:** design tokens and base styles in `src/styles/global.css`, plain CSS, scoped component styles.
+- **Styles:** design tokens and base styles in `src/assets/css/global.css`, plain CSS, scoped component styles.
 - **Fonts:** Inter, self-hosted in `src/assets/fonts/`.
 - **Forms:** [submito](https://submito.kreativan.dev) for AJAX forms with validation and captchas.
 - **Sitemap:** `@astrojs/sitemap`, with `/guidelines/` excluded.
@@ -59,7 +59,9 @@ The site variables are validated by `env.schema` in `astro.config.mjs`. Read the
 
 ```
 src/
-  assets/fonts/          Self-hosted fonts and their @font-face CSS
+  assets/
+    css/global.css       Design tokens and base styles
+    fonts/               Self-hosted fonts and their @font-face CSS
   components/
     global/              Header, Footer, Meta
     ui/                  Reusable UI components
@@ -67,7 +69,6 @@ src/
   layouts/Layout.astro   Page shell
   lib/                   JS/TS helpers
   pages/                 Routes
-  styles/global.css      Design tokens and base styles
 public/                  Static files served as-is
 ```
 

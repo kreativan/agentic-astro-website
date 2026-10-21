@@ -14,7 +14,7 @@ description: >-
 # Build a site
 
 The starter gives you `Layout` (head, header, `<main>`, footer), `Meta` (SEO
-tags), global tokens in `src/styles/global.css`, the Inter font, and env-driven
+tags), global tokens in `src/assets/css/global.css`, the Inter font, and env-driven
 site settings. Follow the conventions in `AGENTS.md` throughout. This skill is
 the workflow around them.
 
@@ -54,7 +54,7 @@ If the mode, page list or content is unclear, ask before building.
 ## 4. Design tokens and assets
 
 **From scratch:** run the frontend-design planning pass, then write the result
-into the `:root` tokens in `src/styles/global.css`. Replace the starter
+into the `:root` tokens in `src/assets/css/global.css`. Replace the starter
 values rather than adding a second set. Swap the font if the plan calls for
 it: add the files to `src/assets/fonts/`, a `@font-face` stylesheet next to
 them, import it in `Layout.astro`, and update `--font-sans`.
@@ -65,8 +65,8 @@ SVGs or rebuild CSS from scratch.
 | Source asset | Where it goes |
 |--------------|---------------|
 | Fonts | `src/assets/fonts/` + a `@font-face` CSS file imported in `Layout.astro` |
-| Colors, sizes, spacing from the source CSS | `:root` tokens in `src/styles/global.css`, using the source's values |
-| Base element styles | `src/styles/global.css` |
+| Colors, sizes, spacing from the source CSS | `:root` tokens in `src/assets/css/global.css`, using the source's values |
+| Base element styles | `src/assets/css/global.css` |
 | Section and component styles | Scoped `<style>` in the matching component |
 | Vendor CSS/JS (slider, lightbox…) | npm package if one exists, otherwise `public/` + Layout `styles` / `scripts` props |
 | Custom JS | `src/lib/`, imported from a component `<script>` |
@@ -114,7 +114,7 @@ about/    ...
 - [ ] Page list confirmed with the user
 - [ ] `.env`, `.env.example` and `env.schema` agree
 - [ ] Original assets reused (convert / example); nothing redrawn
-- [ ] Tokens live in `src/styles/global.css`; no repeated hard-coded values
+- [ ] Tokens live in `src/assets/css/global.css`; no repeated hard-coded values
 - [ ] Every section is its own component, in the right folder
 - [ ] Every page sets `title` and `description` through `Layout`
 - [ ] Placeholders listed for the user
