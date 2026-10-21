@@ -1,0 +1,22 @@
+{
+  "extends": "astro/tsconfigs/base",
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist"
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 5,
+    "paths": {
+      "@src/*": [
+        "./src/*"
+      ],
+      "@tiebreak/*": [
+        "./node_modules/@tiebreak-websites/astro-wp/src/*"
+      ],
+    },
+  }
+}

@@ -1,0 +1,57 @@
+---
+/**
+ * Layout component for the Astro project
+ * <Layout
+ *    title="Page Title"
+ *    description="Page Description"
+ *    image="/og/page.jpg"
+ *    type="article"
+ *    scripts={["one.js", "two.js"]}
+ *    styles={["one.css", "two.css"]}
+ *    noindex
+ * >
+ * title, description, image, canonical, type and noindex are passed to Meta.astro.
+ */
+
+import "@src/assets/fonts/inter.css";
+import Meta from "@src/components/global/Meta.astro";
+import Header from "@src/components/global/Header.astro";
+import Footer from "@src/components/global/Footer.astro";
+
+const { title, description, image, canonical, type, scripts, styles, noindex } = Astro.props;
+
+const lang = import.meta.env.SITE_LANG;
+---
+
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Meta  -->
+    <Meta
+      title={title}
+      description={description}
+      image={image}
+      canonical={canonical}
+      type={type}
+      noindex={noindex}
+    />
+
+
+    <!-- page specific styles and scripts -->
+    {
+      styles &&
+        styles.map((style: string) => <link rel="stylesheet" href={style} />)
+    }
+    {
+      scripts &&
+        scripts.map((script: string) => <script is:inline src={script} defer />)
+    }
+  </head>
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>

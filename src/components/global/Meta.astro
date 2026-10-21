@@ -1,0 +1,57 @@
+---
+/**
+ * Meta tags for the <head>: title, description, canonical URL, Open Graph,
+ * Twitter card, robots and favicons. Rendered once by Layout.astro.
+ *
+ * <Meta
+ *    title="Page Title"                  // "Page Title | Site name"; omit on the home page for just the site name
+ *    description="Page description"      // ~150 characters, shown in search results and link previews
+ *    image="/og/home.jpg"                // optional: path in public/, absolute URL, or an imported image from src/assets/
+ *    canonical="https://…/page/"         // optional: defaults to the current URL
+ *    type="article"                      // optional: Open Graph type, defaults to "website"
+ *    noindex                             // optional: keep the page out of search engines
+ * />
+ *
+ * Absolute URLs are built from `site` in astro.config.mjs.
+ */
+
+const siteName = "Agentic Astro Website";
+const defaultDescription = "";
+const defaultImage = "";
+
+const {
+  title,
+  description = defaultDescription,
+  image = defaultImage,
+  canonical,
+  type = "website",
+  noindex = false,
+} = Astro.props;
+
+const base = Astro.site ?? Astro.url;
+const pageTitle = title && title !== siteName ? `${title} | ${siteName}` : siteName;
+const canonicalUrl = new URL(canonical ?? Astro.url.pathname, base).href;
+const imageSrc = typeof image === "string" ? image : image?.src;
+const imageUrl = imageSrc ? new URL(imageSrc, base).href : null;
+---
+
+<title>{pageTitle}</title>
+{description && <meta name="description" content={description} />}
+<link rel="canonical" href={canonicalUrl} />
+<meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={pageTitle} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:url" content={canonicalUrl} />
+{imageUrl && <meta property="og:image" content={imageUrl} />}
+
+<meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+<meta name="twitter:title" content={pageTitle} />
+{description && <meta name="twitter:description" content={description} />}
+{imageUrl && <meta name="twitter:image" content={imageUrl} />}
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="sitemap" href="/sitemap-index.xml" />
