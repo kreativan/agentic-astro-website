@@ -20,5 +20,8 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# local agent settings
+.claude/settings.local.json
+
 # jetbrains setting folder
 .idea/

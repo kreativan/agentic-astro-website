@@ -39,18 +39,21 @@ Before writing anything, inventory what was actually built:
   `<page>/`. For each one, note its props, its variants, and which pages use it.
   Include components from any npm package the site imports.
 - **Tokens:** colors, font families, type scale, spacing, radii, shadows,
-  breakpoints, container widths, z-index, transitions. Look wherever the
-  project defines them: CSS custom properties, Tailwind `@theme` or config,
-  SCSS variables, and the stylesheets carried over from a converted site.
+  breakpoints, container widths, z-index, transitions. Start with the `:root`
+  tokens in `src/styles/global.css`, then look for any defined elsewhere: other
+  CSS custom properties, Tailwind `@theme` or config, SCSS variables, and
+  stylesheets carried over from a converted site. Remove starter tokens the
+  site never uses, and ask before deleting anything else.
 - **Assets:** fonts (`src/assets/fonts/`), icons and SVGs, images, and
   third-party CSS and JS in `public/`.
 - **Behavior:** helpers in `src/lib/`, sliders, modals, animations, forms
   (submito, see the [submito skill](../submito/SKILL.md)), and external
   scripts.
 - **Config:** `astro.config.mjs` (output mode, adapter, integrations, sitemap
-  filter), `tsconfig.json` aliases, and the env vars the code reads
-  (`ASTRO_SSR`, `SITE_LANG`, and any added later). Document variable names,
-  never their values.
+  filter, `env.schema`), `tsconfig.json` aliases, and every env var
+  (`SITE_URL`, `SITE_LANG`, `SITE_NAME`, `SITE_DESCRIPTION`, `SITE_IMAGE`,
+  `ASTRO_SSR`, and any added later). Check that `.env.example` lists them all.
+  Document variable names, never their values.
 - **i18n (if any):** where translations live, the key naming pattern, and the
   supported languages.
 
@@ -242,9 +245,8 @@ description: >-
 Context, then steps, rules, a reference snippet, and a checklist.
 ```
 
-- Write each skill to **both** `.agents/skills/<name>/SKILL.md` and
-  `.claude/skills/<name>/SKILL.md`. The two folders must stay identical (skip
-  this if `.claude/skills` is a symlink to `.agents/skills`).
+- Write each skill to `.agents/skills/<name>/SKILL.md`. `.claude/skills` is a
+  symlink to `.agents/skills`, so do not create files there.
 - Link `DESIGN.md` and the other skills instead of repeating them.
 - Put long reference material in `references/*.md` next to `SKILL.md`.
 
@@ -253,25 +255,22 @@ Context, then steps, rules, a reference snippet, and a checklist.
 Rewrite `AGENTS.md` so it describes **this project**, not the blank starter.
 Keep it short; detail goes in `DESIGN.md` and the skills.
 
-- **Keep:** the Development, Project and Documentation sections, and the
-  rules that still apply (TypeScript, components, JavaScript, repeating items,
-  forms).
+- **Keep and update:** Development, Project, Environment (add any new vars),
+  Conventions, Styling, Head & SEO, Verify, and Documentation.
 - **Add:**
   - A **Project overview**: brand, purpose, the page list with routes, and
     anything unusual (SSR, external content, external scripts).
-  - **Environment**: each env var the code reads and what it changes.
   - **Design**: "Read `DESIGN.md` before changing UI. Live examples at
     `/guidelines/`."
-  - **Where things are**: real paths for tokens, global styles, fonts, icons,
-    and `src/lib/` helpers.
-  - **Skills**: a table of every skill in `.agents/skills/` and when to use it.
+  - **Where things are**: real paths for fonts, icons, images and `src/lib/`
+    helpers, beyond what Styling already lists.
   - **Keeping docs in sync**: "When you add or change a component, token or
     section, update `DESIGN.md` and its `/guidelines/` example in the same
     change."
-- **Remove:** starter-only guidance that no longer applies, such as
-  "Converting an existing project" once the conversion is done. Also replace
-  the "Finishing a build" section: say that handoff has been done and that
-  agents should re-run this skill after large redesigns.
+- **Skills table:** add every project skill you created, and remove
+  `build-site` and the "Starting a new site" section. The site is built.
+- **Replace** the "Finishing a build" section: say that handoff has been done
+  and that agents should re-run this skill after large redesigns.
 
 ## 6. Verify
 
@@ -284,7 +283,8 @@ Keep it short; detail goes in `DESIGN.md` and the skills.
 - [ ] Every token in `DESIGN.md` exists in the code with the same value
 - [ ] Every path, import and skill link in `AGENTS.md` / `DESIGN.md` resolves
 - [ ] No env var values or secrets appear in `DESIGN.md` or `AGENTS.md`
-- [ ] New skills exist in both `.agents/skills/` and `.claude/skills/`
+- [ ] New skills are in `.agents/skills/`, and `.claude/skills` is still a symlink
+- [ ] `npm run check` passes
 
 Finish with a short summary for the user: the files you created or changed,
 the skills you added (and why), and any design and code mismatches you found.

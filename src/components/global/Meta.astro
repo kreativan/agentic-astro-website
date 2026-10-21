@@ -12,17 +12,16 @@
  *    noindex                             // optional: keep the page out of search engines
  * />
  *
- * Absolute URLs are built from `site` in astro.config.mjs.
+ * Absolute URLs are built from SITE_URL. Site name and fallbacks come from
+ * SITE_NAME, SITE_DESCRIPTION and SITE_IMAGE (see .env.example).
  */
 
-const siteName = "Agentic Astro Website";
-const defaultDescription = "";
-const defaultImage = "";
+import { SITE_NAME as siteName, SITE_DESCRIPTION, SITE_IMAGE } from "astro:env/server";
 
 const {
   title,
-  description = defaultDescription,
-  image = defaultImage,
+  description = SITE_DESCRIPTION,
+  image = SITE_IMAGE,
   canonical,
   type = "website",
   noindex = false,

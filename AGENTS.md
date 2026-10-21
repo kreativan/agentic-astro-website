@@ -14,13 +14,27 @@ On Windows, Astro does not background the server automatically. Pass `--backgrou
 
 Import app files with the `@src/` alias.
 
-## Building pages
+## Starting a new site
 
-These rules apply when building an Astro site from scratch, from an example, or from a provided URL.
+To build a site from scratch, from an example, or by converting an existing site or URL, follow the [build-site](.agents/skills/build-site/SKILL.md) skill.
 
-### Converting an existing project
+## Environment
 
-When converting an existing project to Astro, reuse its assets (CSS, JS, SVG, images, fonts). Do not rebuild those files from scratch.
+Site settings come from `.env` (see `.env.example`). Never commit `.env`.
+
+| Variable | Used for |
+|----------|----------|
+| `SITE_URL` | `site` in `astro.config.mjs`: canonical URLs, Open Graph URLs, sitemap |
+| `SITE_LANG` | `<html lang>`. Defaults to `en` |
+| `SITE_NAME` | Page titles (`Page \| Site name`), `og:site_name`, header, footer |
+| `SITE_DESCRIPTION` | Fallback meta description |
+| `SITE_IMAGE` | Fallback social image (path in `public/` or absolute URL) |
+| `ASTRO_SSR` | `1` = SSR with the Node adapter, `0` = static build |
+
+- Read site settings in components with `import { SITE_NAME } from "astro:env/server"`.
+- A new variable goes in `env.schema` in `astro.config.mjs` and in `.env.example`.
+
+## Conventions
 
 ### TypeScript
 
@@ -44,6 +58,10 @@ src/components/home/feature-grid/FeatureGrid.astro
 src/components/home/feature-grid/Card.astro
 ```
 
+### Pages
+
+- Pages only compose sections inside `<Layout>`. `Layout` already renders the header, `<main>` and the footer.
+
 ### JavaScript
 
 - Do not put long JavaScript in `astro.config`, a component, or a layout.
@@ -56,6 +74,36 @@ src/components/home/feature-grid/Card.astro
 ### Repeating items
 
 - For sliders, lists, and any repeated markup, define the items as an array or object at the top of the component and render them with `.map()`. Do not copy the same HTML block once per item.
+
+## Styling
+
+- Plain CSS. Design tokens (colors, type scale, spacing, radii, motion) and base element styles live in `src/styles/global.css`.
+- Component styles go in the component's scoped `<style>` and use the tokens (`var(--color-primary)`). Do not hard-code a value that a token covers. A value that repeats across components becomes a new token.
+- Wrap content in `.container` for the standard width and side padding.
+- Fonts live in `src/assets/fonts/` and are imported in `Layout.astro`.
+
+## Head and SEO
+
+- Set `title`, `description` and optionally `image`, `type` and `noindex` on `<Layout>`. It passes them to `src/components/global/Meta.astro`.
+- Do not add `<title>`, meta, Open Graph or favicon tags anywhere else.
+
+## Verify
+
+Before reporting work as done:
+
+- `npm run check` (types) and `astro build` pass.
+- UI changes: check the page in the browser at desktop and mobile widths.
+
+## Skills
+
+| Skill | Use when |
+|-------|----------|
+| [build-site](.agents/skills/build-site/SKILL.md) | Building a new site from scratch, from an example, or converting a site or URL |
+| [frontend-design](.agents/skills/frontend-design/SKILL.md) | Only when designing a new site from scratch. Ignore it when converting, following an example, or changing an existing design |
+| [submito](.agents/skills/submito/SKILL.md) | Adding or fixing a form |
+| [project-handoff](.agents/skills/project-handoff/SKILL.md) | After the build is done, or after a large redesign |
+
+Skills live in `.agents/skills/`. `.claude/skills` is a symlink to it, so edit only `.agents/skills/`.
 
 ## Finishing a build
 
@@ -72,6 +120,8 @@ Do not report the project as finished until the handoff checklist passes.
 
 Full documentation: https://docs.astro.build
 
+When the Astro docs MCP tool (`search_astro_docs`) is available, use it to check Astro APIs before relying on memory. This project runs Astro 7, and older patterns may be outdated.
+
 Consult these guides before working on related tasks:
 
 - [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
@@ -80,3 +130,4 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+- [Environment variables](https://docs.astro.build/en/guides/environment-variables/)

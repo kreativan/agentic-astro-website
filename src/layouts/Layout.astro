@@ -1,34 +1,37 @@
 ---
 /**
- * Layout component for the Astro project
+ * Page layout: <head>, header, <main> and footer. Pages render only their sections inside it.
+ *
  * <Layout
  *    title="Page Title"
  *    description="Page Description"
  *    image="/og/page.jpg"
  *    type="article"
- *    scripts={["one.js", "two.js"]}
- *    styles={["one.css", "two.css"]}
+ *    scripts={["/js/one.js"]}     // files in public/, loaded with defer
+ *    styles={["/css/one.css"]}    // files in public/
  *    noindex
  * >
+ *    <Hero />
+ * </Layout>
+ *
  * title, description, image, canonical, type and noindex are passed to Meta.astro.
  */
 
 import "@src/assets/fonts/inter.css";
+import "@src/styles/global.css";
+import { SITE_LANG } from "astro:env/server";
 import Meta from "@src/components/global/Meta.astro";
 import Header from "@src/components/global/Header.astro";
 import Footer from "@src/components/global/Footer.astro";
 
-const { title, description, image, canonical, type, scripts, styles, noindex } = Astro.props;
-
-const lang = import.meta.env.SITE_LANG;
+const { title, description, image, canonical, type, scripts = [], styles = [], noindex } = Astro.props;
 ---
 
-<html lang={lang} class="scroll-smooth">
+<html lang={SITE_LANG}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Meta  -->
     <Meta
       title={title}
       description={description}
@@ -38,20 +41,14 @@ const lang = import.meta.env.SITE_LANG;
       noindex={noindex}
     />
 
-
-    <!-- page specific styles and scripts -->
-    {
-      styles &&
-        styles.map((style: string) => <link rel="stylesheet" href={style} />)
-    }
-    {
-      scripts &&
-        scripts.map((script: string) => <script is:inline src={script} defer />)
-    }
+    {styles.map((style: string) => <link rel="stylesheet" href={style} />)}
+    {scripts.map((script: string) => <script is:inline src={script} defer />)}
   </head>
   <body>
     <Header />
-    <slot />
+    <main id="main">
+      <slot />
+    </main>
     <Footer />
   </body>
 </html>
