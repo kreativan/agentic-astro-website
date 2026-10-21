@@ -24,7 +24,16 @@ import Meta from "@src/components/global/Meta.astro";
 import Header from "@src/components/global/Header.astro";
 import Footer from "@src/components/global/Footer.astro";
 
-const { title, description, image, canonical, type, scripts = [], styles = [], noindex } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  canonical,
+  type,
+  scripts = [],
+  styles = [],
+  noindex,
+} = Astro.props;
 ---
 
 <html lang={SITE_LANG}>

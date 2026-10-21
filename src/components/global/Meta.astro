@@ -4,19 +4,23 @@
  * Twitter card, robots and favicons. Rendered once by Layout.astro.
  *
  * <Meta
- *    title="Page Title"                  // "Page Title | Site name"; omit on the home page for just the site name
- *    description="Page description"      // ~150 characters, shown in search results and link previews
- *    image="/og/home.jpg"                // optional: path in public/, absolute URL, or an imported image from src/assets/
- *    canonical="https://…/page/"         // optional: defaults to the current URL
- *    type="article"                      // optional: Open Graph type, defaults to "website"
- *    noindex                             // optional: keep the page out of search engines
+ *    title="Page Title"
+ *    description="Page description"
+ *    image="/og/home.jpg" // optional: path in public/, absolute URL, or an imported image from src/
+ *    canonical="https://…/page/" // optional: defaults to the current URL
+ *    type="article" // optional: Open Graph type, defaults to "website"
+ *    noindex // optional: keep the page out of search engines
  * />
  *
  * Absolute URLs are built from SITE_URL. Site name and fallbacks come from
  * SITE_NAME, SITE_DESCRIPTION and SITE_IMAGE (see .env.example).
  */
 
-import { SITE_NAME as siteName, SITE_DESCRIPTION, SITE_IMAGE } from "astro:env/server";
+import {
+  SITE_NAME as siteName,
+  SITE_DESCRIPTION,
+  SITE_IMAGE,
+} from "astro:env/server";
 
 const {
   title,
@@ -28,7 +32,8 @@ const {
 } = Astro.props;
 
 const base = Astro.site ?? Astro.url;
-const pageTitle = title && title !== siteName ? `${title} | ${siteName}` : siteName;
+const pageTitle =
+  title && title !== siteName ? `${title} | ${siteName}` : siteName;
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, base).href;
 const imageSrc = typeof image === "string" ? image : image?.src;
 const imageUrl = imageSrc ? new URL(imageSrc, base).href : null;
@@ -46,7 +51,10 @@ const imageUrl = imageSrc ? new URL(imageSrc, base).href : null;
 <meta property="og:url" content={canonicalUrl} />
 {imageUrl && <meta property="og:image" content={imageUrl} />}
 
-<meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+<meta
+  name="twitter:card"
+  content={imageUrl ? "summary_large_image" : "summary"}
+/>
 <meta name="twitter:title" content={pageTitle} />
 {description && <meta name="twitter:description" content={description} />}
 {imageUrl && <meta name="twitter:image" content={imageUrl} />}
