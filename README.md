@@ -16,7 +16,15 @@ An Astro 7 starter for marketing sites, set up to be built and maintained with A
 
 - Node.js 24 or newer
 
-## Getting started
+## Create a new site
+
+```bash
+npx create-agentic-astro-website my-site
+```
+
+This downloads the starter, creates `.env`, installs dependencies and makes the first commit. See [`create/README.md`](create/README.md) for options. The CLI lives in `create/` and is not copied into new projects.
+
+## Getting started (this repo)
 
 ```bash
 npm install

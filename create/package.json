@@ -1,0 +1,32 @@
+{
+  "name": "create-agentic-astro-website",
+  "version": "0.1.0",
+  "description": "Create a new site from the Agentic Astro Website starter: Astro 7, agent-ready AGENTS.md and skills.",
+  "type": "module",
+  "bin": {
+    "create-agentic-astro-website": "index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "astro",
+    "starter",
+    "template",
+    "create",
+    "agents",
+    "ai"
+  ],
+  "author": "Ivan Milincic",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kreativan/agentic-astro-website.git",
+    "directory": "create"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "dependencies": {
+    "giget": "^3.3.1"
+  }
+}
