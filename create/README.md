@@ -4,12 +4,12 @@ Create a new site from the [Agentic Astro Website](https://github.com/kreativan/
 
 ```bash
 npx create-agentic-astro-website my-site
-npx create-agentic-astro-website my-site --template bootstrap
+npx create-agentic-astro-website my-site --template bootstrap --emdash
 # or
 npm create agentic-astro-website@latest my-site -- --template bootstrap
 ```
 
-With no `--template` and no `--ref`, it asks you to pick one. Non-interactive runs use `default`.
+With no `--template` and no `--ref`, it asks you to pick one. Non-interactive runs use `default`. It then asks whether to add EmDash, unless you pass `--emdash` or `--no-emdash`. Non-interactive runs skip EmDash unless you pass `--emdash`.
 
 It downloads that branch of the starter, sets the package name, creates `.env` from `.env.example`, links `.claude/skills` to `.agents/skills`, installs dependencies and makes the first git commit.
 
@@ -28,6 +28,8 @@ A new variant is a branch plus one entry in `TEMPLATES` in `index.js`. Publish t
 |--------|-------------|
 | `--template <name>` | `default` or `bootstrap` |
 | `--ref <ref>` | Branch or tag, instead of `--template` |
+| `--emdash` | Add EmDash and switch the project to server rendering |
+| `--no-emdash` | Do not add EmDash, and do not ask |
 | `--no-install` | Skip installing dependencies |
 | `--no-git` | Skip `git init` |
 | `-h`, `--help` | Show help |
