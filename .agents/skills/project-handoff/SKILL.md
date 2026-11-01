@@ -41,7 +41,7 @@ Before writing anything, inventory what was actually built:
 - **Tokens:** colors, font families, type scale, spacing, radii, shadows,
   breakpoints, container widths, z-index, transitions. On this variant, start
   with Bootstrap's `--bs-*` variables and theme classes, then
-  `src/assets/css/global.css`. Also look for tokens defined elsewhere: other
+  `src/assets/scss/style.scss`. Also look for tokens defined elsewhere: other
   CSS custom properties, Tailwind `@theme` or config, SCSS variables, and
   stylesheets carried over from a converted site. Remove starter extras the
   site never uses, and ask before deleting anything else.

@@ -60,8 +60,9 @@ Bootstrap. Change colors through the
 Bootstrap components and utilities for layout, type, and spacing. Swap the
 font if the plan calls for it: add the files to `src/assets/fonts/`, a
 `@font-face` stylesheet next to them, import it in `Layout.astro`, and set
-`--body-font-family` in `src/assets/css/global.css`. Change Bootstrap itself in
-`src/assets/scss/bootstrap.scss`, not by importing `bootstrap/dist/css`.
+`--body-font-family` in the `$root-tokens` map in `src/assets/scss/style.scss`.
+Change colors, spacing, and the container in that same `@use ... with` block.
+Do not import `bootstrap/dist/css`.
 
 **Convert / example:** reuse the original assets. Do not redraw icons, retype
 SVGs or rebuild CSS from scratch.
@@ -69,8 +70,8 @@ SVGs or rebuild CSS from scratch.
 | Source asset | Where it goes |
 |--------------|---------------|
 | Fonts | `src/assets/fonts/` + a `@font-face` CSS file imported in `Layout.astro` |
-| Colors, sizes, spacing from the source CSS | Bootstrap theme tokens and utilities. `global.css` only for what Bootstrap cannot express |
-| Base element styles | Bootstrap's reboot. Do not copy them into `global.css` |
+| Colors, sizes, spacing from the source CSS | The `@use ... with` block in `src/assets/scss/style.scss` |
+| Base element styles | `$root-tokens` in `style.scss`. Bootstrap's reboot covers the rest |
 | Section and component styles | Scoped `<style>` in the matching component |
 | Vendor CSS/JS (slider, lightbox…) | npm package if one exists, otherwise `public/` + Layout `styles` / `scripts` props |
 | Custom JS | `src/lib/`, imported from a component `<script>` |

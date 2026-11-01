@@ -5,7 +5,7 @@ An Astro 7 starter for marketing sites, set up to be built and maintained with A
 ## What's included
 
 - **Layout and SEO:** `Layout.astro` renders the head, header, `<main>` and footer. `Meta.astro` handles the title, description, canonical URL, Open Graph, Twitter card, robots and favicons.
-- **Styles:** Bootstrap 6 alpha, compiled from `src/assets/scss/bootstrap.scss`. `src/assets/css/global.css` only holds project extras (font stack, sticky footer).
+- **Styles:** Bootstrap 6 alpha, compiled from `src/assets/scss/style.scss`. Colors, spacing, container, and base type are set in that file.
 - **Fonts:** Inter, self-hosted in `src/assets/fonts/`.
 - **Forms:** [submito](https://submito.kreativan.dev) for AJAX forms with validation and captchas.
 - **Sitemap:** `@astrojs/sitemap`, with `/guidelines/` excluded.
@@ -60,8 +60,7 @@ The site variables are validated by `env.schema` in `astro.config.mjs`. Read the
 ```
 src/
   assets/
-    css/global.css       Project extras on top of Bootstrap
-    scss/bootstrap.scss  Bootstrap source entry (`@use "bootstrap/scss/bootstrap"`)
+    scss/style.scss      Bootstrap source, theme overrides, and project layout
     fonts/               Self-hosted fonts and their @font-face CSS
   components/
     global/              Header, Footer, Meta

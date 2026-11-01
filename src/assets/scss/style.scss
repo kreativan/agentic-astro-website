@@ -1,0 +1,50 @@
+// Site styles. This file loads Bootstrap and the project extras.
+// CSS variables compiled from this source are unprefixed (`--body-font-family`).
+// Do not import bootstrap/dist/css. Maps merge: pass only the keys you change.
+// Set a key to null to remove it. `primary` follows `$blue`.
+
+@use "bootstrap/scss/bootstrap" with (
+  // Main colors. Each hue anchors step 500; the rest of the scale is generated.
+  $blue: oklch(60% 0.24 240),
+  $red: oklch(60% 0.22 20),
+  $green: oklch(64% 0.22 160),
+  $yellow: oklch(88% 0.24 88),
+  $gray: oklch(60% 0.02 245),
+
+  // Spacing. The 0–12 steps are multiples of $spacer.
+  $spacer: 1rem,
+
+  // Container.
+  $container-padding-x: 1.5rem,
+  $container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1200px,
+    2xl: 1440px,
+  ),
+
+  // Base: type, links, borders. Body background is $theme-bgs "body".
+  $root-tokens: (
+    --body-font-family: "Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+    --body-font-size: 1rem,
+    --body-line-height: 1.5,
+  ),
+  $theme-bgs: (
+    "body": light-dark(var(--white), var(--gray-975)),
+  ),
+  $theme-fgs: (
+    "body": light-dark(var(--gray-900), var(--gray-050)),
+  ),
+);
+
+// Project layout. Bootstrap does not do this.
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}

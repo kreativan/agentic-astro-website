@@ -77,10 +77,9 @@ src/components/home/feature-grid/Card.astro
 
 ## Styling
 
-- Bootstrap 6 is the design system. `Layout.astro` imports `src/assets/scss/bootstrap.scss`, which loads Bootstrap and its components from Sass (`@use "bootstrap/scss/bootstrap"`). Do not import `bootstrap/dist/css`. CSS variables from this compile are unprefixed (`--body-font-family`), not `--bs-*`. JavaScript plugins still come from the `bootstrap` package.
+- Bootstrap 6 is the design system. `Layout.astro` imports `src/assets/scss/style.scss`. That file loads Bootstrap from Sass and holds the project overrides: main colors, `$spacer`, container widths, and base type. Do not import `bootstrap/dist/css`. CSS variables from this compile are unprefixed (`--body-font-family`), not `--bs-*`. JavaScript plugins still come from the `bootstrap` package.
 - Mark up with Bootstrap classes: `container`, `navbar`, `btn-solid`, `theme-primary`, spacing utilities, and so on. Bootstrap 6 uses `theme-*` classes (`theme-primary`, `theme-muted`), not the old `text-primary` / `btn-primary` names.
-- `src/assets/css/global.css` loads after Bootstrap and only holds project extras (the Inter font stack, the sticky footer). Do not rebuild Bootstrap's reboot, grid, or utilities there.
-- A value that belongs to the theme (a color, a radius, a type size) is changed in `src/assets/scss/bootstrap.scss` through Bootstrap's Sass token maps. Follow the bootstrap skills below. Do not add a second copy of a Bootstrap partial.
+- Change colors, spacing, the container, and base type in the `@use "bootstrap/scss/bootstrap" with (...)` block in `style.scss`. `primary` follows `$blue`. Follow the bootstrap skills. Do not add a second copy of a Bootstrap partial.
 - Component-specific CSS goes in the component's scoped `<style>` only when no Bootstrap class does the job.
 - Fonts live in `src/assets/fonts/` and are imported in `Layout.astro`.
 
@@ -114,7 +113,7 @@ Before reporting work as done:
 | [submito](.agents/skills/submito/SKILL.md) | Adding or fixing a form |
 | [project-handoff](.agents/skills/project-handoff/SKILL.md) | After the build is done, or after a large redesign |
 
-Bootstrap is already installed and loaded. Ignore [bootstrap-v6-install](.agents/skills/bootstrap-v6-install/SKILL.md) and [bootstrap-npm](.agents/skills/bootstrap-npm/SKILL.md). Ignore the new-project scaffold in [bootstrap-vite](.agents/skills/bootstrap-vite/SKILL.md). Bootstrap Sass is already loaded from `src/assets/scss/bootstrap.scss`.
+Bootstrap is already installed and loaded. Ignore [bootstrap-v6-install](.agents/skills/bootstrap-v6-install/SKILL.md) and [bootstrap-npm](.agents/skills/bootstrap-npm/SKILL.md). Ignore the new-project scaffold in [bootstrap-vite](.agents/skills/bootstrap-vite/SKILL.md). Bootstrap Sass is already loaded from `src/assets/scss/style.scss`.
 
 Skills live in `.agents/skills/`. `.claude/skills` is a symlink to it, so edit only `.agents/skills/`.
 
