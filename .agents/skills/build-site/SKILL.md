@@ -60,7 +60,8 @@ Bootstrap. Change colors through the
 Bootstrap components and utilities for layout, type, and spacing. Swap the
 font if the plan calls for it: add the files to `src/assets/fonts/`, a
 `@font-face` stylesheet next to them, import it in `Layout.astro`, and set
-`--bs-body-font-family` in `src/assets/css/global.css`.
+`--body-font-family` in `src/assets/css/global.css`. Change Bootstrap itself in
+`src/assets/scss/bootstrap.scss`, not by importing `bootstrap/dist/css`.
 
 **Convert / example:** reuse the original assets. Do not redraw icons, retype
 SVGs or rebuild CSS from scratch.

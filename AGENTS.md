@@ -77,10 +77,10 @@ src/components/home/feature-grid/Card.astro
 
 ## Styling
 
-- Bootstrap 6 is the design system. `Layout.astro` imports `bootstrap/dist/css/bootstrap.min.css` and loads every Bootstrap plugin from the `bootstrap` package.
+- Bootstrap 6 is the design system. `Layout.astro` imports `src/assets/scss/bootstrap.scss`, which loads Bootstrap and its components from Sass (`@use "bootstrap/scss/bootstrap"`). Do not import `bootstrap/dist/css`. CSS variables from this compile are unprefixed (`--body-font-family`), not `--bs-*`. JavaScript plugins still come from the `bootstrap` package.
 - Mark up with Bootstrap classes: `container`, `navbar`, `btn-solid`, `theme-primary`, spacing utilities, and so on. Bootstrap 6 uses `theme-*` classes (`theme-primary`, `theme-muted`), not the old `text-primary` / `btn-primary` names.
 - `src/assets/css/global.css` loads after Bootstrap and only holds project extras (the Inter font stack, the sticky footer). Do not rebuild Bootstrap's reboot, grid, or utilities there.
-- A value that belongs to the theme (a color, a radius, a type size) is changed through Bootstrap's color system and Sass token maps. Follow the bootstrap skills below.
+- A value that belongs to the theme (a color, a radius, a type size) is changed in `src/assets/scss/bootstrap.scss` through Bootstrap's Sass token maps. Follow the bootstrap skills below. Do not add a second copy of a Bootstrap partial.
 - Component-specific CSS goes in the component's scoped `<style>` only when no Bootstrap class does the job.
 - Fonts live in `src/assets/fonts/` and are imported in `Layout.astro`.
 
@@ -114,7 +114,7 @@ Before reporting work as done:
 | [submito](.agents/skills/submito/SKILL.md) | Adding or fixing a form |
 | [project-handoff](.agents/skills/project-handoff/SKILL.md) | After the build is done, or after a large redesign |
 
-Bootstrap is already installed and loaded. Ignore [bootstrap-v6-install](.agents/skills/bootstrap-v6-install/SKILL.md) and [bootstrap-npm](.agents/skills/bootstrap-npm/SKILL.md). Ignore the new-project scaffold in [bootstrap-vite](.agents/skills/bootstrap-vite/SKILL.md). Use that skill only for how Astro should import Bootstrap CSS and JS.
+Bootstrap is already installed and loaded. Ignore [bootstrap-v6-install](.agents/skills/bootstrap-v6-install/SKILL.md) and [bootstrap-npm](.agents/skills/bootstrap-npm/SKILL.md). Ignore the new-project scaffold in [bootstrap-vite](.agents/skills/bootstrap-vite/SKILL.md). Bootstrap Sass is already loaded from `src/assets/scss/bootstrap.scss`.
 
 Skills live in `.agents/skills/`. `.claude/skills` is a symlink to it, so edit only `.agents/skills/`.
 
