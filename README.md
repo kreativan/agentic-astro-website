@@ -1,11 +1,11 @@
 # Agentic Astro Website
 
-An Astro 7 starter for marketing sites, set up to be built and maintained with AI coding agents (Cursor, Claude Code, Codex). The conventions, skills and handoff process are written for agents. The result is plain Astro that any developer can work on.
+An Astro 7 starter for marketing sites, set up to be built and maintained with AI coding agents (Cursor, Claude Code, Codex). This branch is the Bootstrap 6 variant. The conventions, skills and handoff process are written for agents.
 
 ## What's included
 
 - **Layout and SEO:** `Layout.astro` renders the head, header, `<main>` and footer. `Meta.astro` handles the title, description, canonical URL, Open Graph, Twitter card, robots and favicons.
-- **Styles:** design tokens and base styles in `src/assets/css/global.css`, plain CSS, scoped component styles.
+- **Styles:** Bootstrap 6 alpha, loaded from `Layout.astro`. `src/assets/css/global.css` only holds project extras (font stack, sticky footer).
 - **Fonts:** Inter, self-hosted in `src/assets/fonts/`.
 - **Forms:** [submito](https://submito.kreativan.dev) for AJAX forms with validation and captchas.
 - **Sitemap:** `@astrojs/sitemap`, with `/guidelines/` excluded.
@@ -19,10 +19,10 @@ An Astro 7 starter for marketing sites, set up to be built and maintained with A
 ## Create a new site
 
 ```bash
-npx create-agentic-astro-website my-site
+npx create-agentic-astro-website my-site --template bootstrap
 ```
 
-This downloads the starter, creates `.env`, installs dependencies and makes the first commit. See [`create/README.md`](create/README.md) for options. The CLI lives in `create/` and is not copied into new projects.
+This downloads the starter, creates `.env`, installs dependencies and makes the first commit. `--template` is `default` (plain CSS, the `main` branch) or `bootstrap` (this branch). See [`create/README.md`](create/README.md) for options. The CLI lives in `create/` and is not copied into new projects.
 
 ## Getting started (this repo)
 
@@ -60,7 +60,7 @@ The site variables are validated by `env.schema` in `astro.config.mjs`. Read the
 ```
 src/
   assets/
-    css/global.css       Design tokens and base styles
+    css/global.css       Project extras on top of Bootstrap
     fonts/               Self-hosted fonts and their @font-face CSS
   components/
     global/              Header, Footer, Meta
@@ -79,7 +79,11 @@ public/                  Static files served as-is
 | Skill | Purpose |
 |-------|---------|
 | `build-site` | Build a new site from scratch, from an example, or by converting a site or URL |
-| `frontend-design` | Design direction for from-scratch builds |
+| `frontend-design` | Design direction for from-scratch builds. Implement it with Bootstrap |
+| `bootstrap-component` | Markup and CSS for a Bootstrap component |
+| `bootstrap-component-js` | JavaScript behavior for a Bootstrap component |
+| `bootstrap-color-system` | Theme colors and color modes |
+| `bootstrap-utility-api` | Utility classes |
 | `submito` | Wire up forms |
 | `project-handoff` | Finish the build: writes `DESIGN.md`, the `/guidelines/` style guide and a project-specific `AGENTS.md` |
 
@@ -88,5 +92,5 @@ A typical flow: ask the agent to build the site (it follows `build-site`). When 
 ### Updating skills
 
 - `submito` ships with the npm package. After upgrading `submito`, run `npx submito skill --codex` to refresh `.agents/skills/submito`.
-- `frontend-design` comes from [anthropics/skills](https://github.com/anthropics/skills) and is tracked in `skills-lock.json`.
+- `frontend-design` and the `bootstrap-*` skills are tracked in `skills-lock.json`. The Bootstrap skills come from [twbs/bootstrap](https://github.com/twbs/bootstrap). `bootstrap-v6-install`, `bootstrap-npm`, and the Vite scaffold in `bootstrap-vite` do not apply here: Bootstrap is already loaded by `Layout.astro`.
 - `build-site` and `project-handoff` belong to this starter. Edit them in place.

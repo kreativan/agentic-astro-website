@@ -4,21 +4,8 @@ import { SITE_NAME } from "astro:env/server";
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer">
+<footer class="border-top py-4">
   <div class="container">
-    <p class="footer__copy">&copy; {year} {SITE_NAME}. All rights reserved.</p>
+    <p class="theme-muted small mb-0">&copy; {year} {SITE_NAME}. All rights reserved.</p>
   </div>
 </footer>
-
-<style>
-  .footer {
-    padding-block: var(--space-8);
-    border-top: 1px solid var(--color-border);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-  }
-
-  .footer__copy {
-    margin: 0;
-  }
-</style>

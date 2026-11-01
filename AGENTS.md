@@ -12,7 +12,7 @@ On Windows, Astro does not background the server automatically. Pass `--backgrou
 
 ## Project
 
-Import app files with the `@src/` alias.
+This is the Bootstrap variant of the starter (Bootstrap 6 alpha). Import app files with the `@src/` alias.
 
 ## Starting a new site
 
@@ -77,10 +77,17 @@ src/components/home/feature-grid/Card.astro
 
 ## Styling
 
-- Plain CSS. Design tokens (colors, type scale, spacing, radii, motion) and base element styles live in `src/assets/css/global.css`.
-- Component styles go in the component's scoped `<style>` and use the tokens (`var(--color-primary)`). Do not hard-code a value that a token covers. A value that repeats across components becomes a new token.
-- Wrap content in `.container` for the standard width and side padding.
+- Bootstrap 6 is the design system. `Layout.astro` imports `bootstrap/dist/css/bootstrap.min.css` and loads every Bootstrap plugin from the `bootstrap` package.
+- Mark up with Bootstrap classes: `container`, `navbar`, `btn-solid`, `theme-primary`, spacing utilities, and so on. Bootstrap 6 uses `theme-*` classes (`theme-primary`, `theme-muted`), not the old `text-primary` / `btn-primary` names.
+- `src/assets/css/global.css` loads after Bootstrap and only holds project extras (the Inter font stack, the sticky footer). Do not rebuild Bootstrap's reboot, grid, or utilities there.
+- A value that belongs to the theme (a color, a radius, a type size) is changed through Bootstrap's color system and Sass token maps. Follow the bootstrap skills below.
+- Component-specific CSS goes in the component's scoped `<style>` only when no Bootstrap class does the job.
 - Fonts live in `src/assets/fonts/` and are imported in `Layout.astro`.
+
+### Bootstrap JavaScript
+
+- Plugins are already registered by the layout script. Use data attributes, or import a named plugin in a component `<script>` with no attributes: `import { Tooltip } from "bootstrap"`.
+- Do not add a CDN build, and do not scaffold a separate Vite project. Astro bundles Bootstrap.
 
 ## Head and SEO
 
@@ -99,9 +106,15 @@ Before reporting work as done:
 | Skill | Use when |
 |-------|----------|
 | [build-site](.agents/skills/build-site/SKILL.md) | Building a new site from scratch, from an example, or converting a site or URL |
-| [frontend-design](.agents/skills/frontend-design/SKILL.md) | Only when designing a new site from scratch. Ignore it when converting, following an example, or changing an existing design |
+| [frontend-design](.agents/skills/frontend-design/SKILL.md) | Only when designing a new site from scratch. Implement the direction with Bootstrap, not a second CSS system. Ignore it when converting, following an example, or changing an existing design |
+| [bootstrap-component](.agents/skills/bootstrap-component/SKILL.md) | Markup and CSS for a Bootstrap component |
+| [bootstrap-component-js](.agents/skills/bootstrap-component-js/SKILL.md) | JavaScript behavior for a Bootstrap component |
+| [bootstrap-color-system](.agents/skills/bootstrap-color-system/SKILL.md) | Theme colors, color modes, and color tokens |
+| [bootstrap-utility-api](.agents/skills/bootstrap-utility-api/SKILL.md) | Adding, changing, or removing utility classes |
 | [submito](.agents/skills/submito/SKILL.md) | Adding or fixing a form |
 | [project-handoff](.agents/skills/project-handoff/SKILL.md) | After the build is done, or after a large redesign |
+
+Bootstrap is already installed and loaded. Ignore [bootstrap-v6-install](.agents/skills/bootstrap-v6-install/SKILL.md) and [bootstrap-npm](.agents/skills/bootstrap-npm/SKILL.md). Ignore the new-project scaffold in [bootstrap-vite](.agents/skills/bootstrap-vite/SKILL.md). Use that skill only for how Astro should import Bootstrap CSS and JS.
 
 Skills live in `.agents/skills/`. `.claude/skills` is a symlink to it, so edit only `.agents/skills/`.
 

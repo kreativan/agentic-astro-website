@@ -2,18 +2,8 @@
 import { SITE_NAME } from "astro:env/server";
 ---
 
-<section class="hero">
+<section class="py-5">
   <div class="container">
-    <h1 class="hero__title">{SITE_NAME}</h1>
+    <h1>{SITE_NAME}</h1>
   </div>
 </section>
-
-<style>
-  .hero {
-    padding-block: var(--space-24);
-  }
-
-  .hero__title {
-    font-size: var(--font-size-3xl);
-  }
-</style>

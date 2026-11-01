@@ -14,8 +14,11 @@
   "dependencies": {
     "@astrojs/node": "^11.1.5",
     "@astrojs/sitemap": "^3.7.4",
+    "@floating-ui/dom": "^1.8.0",
     "astro": "^7.3.2",
-    "submito": "^0.1.5"
+    "bootstrap": "^6.0.0-alpha.1",
+    "submito": "^0.1.5",
+    "vanilla-calendar-pro": "^3.4.0"
   },
   "engines": {
     "node": ">=24"

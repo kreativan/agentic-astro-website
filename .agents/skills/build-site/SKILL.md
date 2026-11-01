@@ -14,9 +14,10 @@ description: >-
 # Build a site
 
 The starter gives you `Layout` (head, header, `<main>`, footer), `Meta` (SEO
-tags), global tokens in `src/assets/css/global.css`, the Inter font, and env-driven
+tags), Bootstrap 6 (CSS and JS already loaded), the Inter font, and env-driven
 site settings. Follow the conventions in `AGENTS.md` throughout. This skill is
-the workflow around them.
+the workflow around them. Build the UI with Bootstrap classes and the
+bootstrap skills. Do not create a second design system beside Bootstrap.
 
 ## 1. Identify the mode
 
@@ -53,11 +54,13 @@ If the mode, page list or content is unclear, ask before building.
 
 ## 4. Design tokens and assets
 
-**From scratch:** run the frontend-design planning pass, then write the result
-into the `:root` tokens in `src/assets/css/global.css`. Replace the starter
-values rather than adding a second set. Swap the font if the plan calls for
-it: add the files to `src/assets/fonts/`, a `@font-face` stylesheet next to
-them, import it in `Layout.astro`, and update `--font-sans`.
+**From scratch:** run the frontend-design planning pass, then implement it with
+Bootstrap. Change colors through the
+[bootstrap-color-system](../bootstrap-color-system/SKILL.md) skill. Use
+Bootstrap components and utilities for layout, type, and spacing. Swap the
+font if the plan calls for it: add the files to `src/assets/fonts/`, a
+`@font-face` stylesheet next to them, import it in `Layout.astro`, and set
+`--bs-body-font-family` in `src/assets/css/global.css`.
 
 **Convert / example:** reuse the original assets. Do not redraw icons, retype
 SVGs or rebuild CSS from scratch.
@@ -65,8 +68,8 @@ SVGs or rebuild CSS from scratch.
 | Source asset | Where it goes |
 |--------------|---------------|
 | Fonts | `src/assets/fonts/` + a `@font-face` CSS file imported in `Layout.astro` |
-| Colors, sizes, spacing from the source CSS | `:root` tokens in `src/assets/css/global.css`, using the source's values |
-| Base element styles | `src/assets/css/global.css` |
+| Colors, sizes, spacing from the source CSS | Bootstrap theme tokens and utilities. `global.css` only for what Bootstrap cannot express |
+| Base element styles | Bootstrap's reboot. Do not copy them into `global.css` |
 | Section and component styles | Scoped `<style>` in the matching component |
 | Vendor CSS/JS (slider, lightbox…) | npm package if one exists, otherwise `public/` + Layout `styles` / `scripts` props |
 | Custom JS | `src/lib/`, imported from a component `<script>` |
@@ -114,7 +117,7 @@ about/    ...
 - [ ] Page list confirmed with the user
 - [ ] `.env`, `.env.example` and `env.schema` agree
 - [ ] Original assets reused (convert / example); nothing redrawn
-- [ ] Tokens live in `src/assets/css/global.css`; no repeated hard-coded values
+- [ ] UI uses Bootstrap classes; colors go through the Bootstrap color system, not a parallel token set
 - [ ] Every section is its own component, in the right folder
 - [ ] Every page sets `title` and `description` through `Layout`
 - [ ] Placeholders listed for the user

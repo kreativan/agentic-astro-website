@@ -17,6 +17,7 @@
  * title, description, image, canonical, type and noindex are passed to Meta.astro.
  */
 
+import "bootstrap/dist/css/bootstrap.min.css";
 import "@src/assets/fonts/inter.css";
 import "@src/assets/css/global.css";
 import { SITE_LANG } from "astro:env/server";
@@ -59,5 +60,9 @@ const {
       <slot />
     </main>
     <Footer />
+    <script>
+      import * as bootstrap from "bootstrap";
+      Reflect.set(window, "bootstrap", bootstrap);
+    </script>
   </body>
 </html>

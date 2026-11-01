@@ -39,10 +39,11 @@ Before writing anything, inventory what was actually built:
   `<page>/`. For each one, note its props, its variants, and which pages use it.
   Include components from any npm package the site imports.
 - **Tokens:** colors, font families, type scale, spacing, radii, shadows,
-  breakpoints, container widths, z-index, transitions. Start with the `:root`
-  tokens in `src/assets/css/global.css`, then look for any defined elsewhere: other
+  breakpoints, container widths, z-index, transitions. On this variant, start
+  with Bootstrap's `--bs-*` variables and theme classes, then
+  `src/assets/css/global.css`. Also look for tokens defined elsewhere: other
   CSS custom properties, Tailwind `@theme` or config, SCSS variables, and
-  stylesheets carried over from a converted site. Remove starter tokens the
+  stylesheets carried over from a converted site. Remove starter extras the
   site never uses, and ask before deleting anything else.
 - **Assets:** fonts (`src/assets/fonts/`), icons and SVGs, images, and
   third-party CSS and JS in `public/`.

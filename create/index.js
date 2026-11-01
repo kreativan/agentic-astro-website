@@ -6,9 +6,10 @@
  *   npm create agentic-astro-website@latest my-site
  *
  * Options:
- *   --ref <ref>      branch or tag of the starter repo (default: main)
- *   --no-install     skip installing dependencies
- *   --no-git         skip git init
+ *   --template <name>  default (plain CSS) or bootstrap (Bootstrap 6)
+ *   --ref <ref>        branch or tag, instead of a named template
+ *   --no-install       skip installing dependencies
+ *   --no-git           skip git init
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -19,33 +20,55 @@ import { downloadTemplate } from "giget";
 const REPO = "github:kreativan/agentic-astro-website";
 const VERSION = JSON.parse(fs.readFileSync(new URL("./package.json", import.meta.url), "utf8")).version;
 
+/** Named starters. The value is the git branch giget downloads. */
+const TEMPLATES = {
+  default: "main",
+  bootstrap: "bootstrap",
+};
+
 const HELP = `create-agentic-astro-website v${VERSION}
 
 Usage:
   npx create-agentic-astro-website [folder] [options]
 
+Templates:
+  default      Plain CSS (branch: main)
+  bootstrap    Bootstrap 6 alpha (branch: bootstrap)
+
 Options:
-  --ref <ref>      branch or tag of the starter repo (default: main)
-  --no-install     skip installing dependencies
-  --no-git         skip git init
-  -h, --help       show this help
-  -v, --version    show the version
+  --template <name>  ${Object.keys(TEMPLATES).join(" | ")} (default: default)
+  --ref <ref>        branch or tag, instead of --template
+  --no-install       skip installing dependencies
+  --no-git           skip git init
+  -h, --help         show this help
+  -v, --version      show the version
 `;
 
 function parseArgs(argv) {
-  const args = { dir: null, ref: "main", install: true, git: true };
+  const args = { dir: null, ref: null, template: null, install: true, git: true };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "-h" || arg === "--help") args.help = true;
     else if (arg === "-v" || arg === "--version") args.version = true;
     else if (arg === "--no-install") args.install = false;
     else if (arg === "--no-git") args.git = false;
+    else if (arg === "--template") args.template = argv[++i];
     else if (arg === "--ref") args.ref = argv[++i];
     else if (!arg.startsWith("-") && !args.dir) args.dir = arg;
     else throw new Error(`Unknown option: ${arg}`);
   }
-  if (!args.ref) throw new Error("--ref needs a branch or tag");
+  if (args.ref === undefined) throw new Error("--ref needs a branch or tag");
+  if (args.template === undefined) throw new Error("--template needs a name");
+  if (args.ref && args.template) throw new Error("Use either --template or --ref, not both");
   return args;
+}
+
+function templateRef(name) {
+  const ref = TEMPLATES[name];
+  if (!ref) {
+    throw new Error(`Unknown template "${name}". Choose one of: ${Object.keys(TEMPLATES).join(", ")}`);
+  }
+  return ref;
 }
 
 async function askDir() {
@@ -54,6 +77,22 @@ async function askDir() {
   const answer = (await rl.question("Project folder (my-site): ")).trim();
   rl.close();
   return answer || "my-site";
+}
+
+async function askTemplate() {
+  if (!process.stdin.isTTY) return "default";
+  const names = Object.keys(TEMPLATES);
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  console.log("\nTemplate:");
+  names.forEach((name, index) => {
+    console.log(`  ${index + 1}) ${name}  [${TEMPLATES[name]}]`);
+  });
+  const answer = (await rl.question("Template (1): ")).trim().toLowerCase();
+  rl.close();
+  if (!answer) return "default";
+  const number = Number(answer);
+  if (Number.isInteger(number) && number >= 1 && number <= names.length) return names[number - 1];
+  return answer;
 }
 
 function isEmptyDir(dir) {
@@ -111,13 +150,14 @@ async function main() {
   const dirName = args.dir ?? (await askDir());
   const dir = path.resolve(dirName);
   const name = path.basename(dir);
+  const ref = args.ref ?? templateRef(args.template ?? (await askTemplate()));
 
   if (!isEmptyDir(dir)) {
     throw new Error(`${dirName} already exists and is not empty.`);
   }
 
-  console.log(`\nCreating ${name} from ${REPO}#${args.ref}…`);
-  await downloadTemplate(`${REPO}#${args.ref}`, {
+  console.log(`\nCreating ${name} from ${REPO}#${ref}…`);
+  await downloadTemplate(`${REPO}#${ref}`, {
     dir,
     force: true,
     ignore: (file) => file === "create" || file.startsWith("create/"),
