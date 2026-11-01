@@ -1,6 +1,6 @@
 {
   "name": "create-agentic-astro-website",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Create a new site from the Agentic Astro Website starter: Astro 7, agent-ready AGENTS.md and skills.",
   "type": "module",
   "bin": {
