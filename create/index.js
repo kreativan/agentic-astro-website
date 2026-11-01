@@ -13,7 +13,7 @@
  *   --no-install       skip installing dependencies
  *   --no-git           skip git init
  */
-import fs from "node:fs";
+import fs, { realpathSync } from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createInterface } from "node:readline/promises";
@@ -350,8 +350,17 @@ and finish the setup wizard (site, account, passkey).` : ""}
 `);
 }
 
-const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-if (isDirectRun) {
+function startedAsCli() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return realpathSync(entry) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (startedAsCli()) {
   main().catch((error) => {
     console.error(`\n${error.message}`);
     process.exit(1);
