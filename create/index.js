@@ -8,6 +8,8 @@
  * Options:
  *   --template <name>  default (plain CSS) or bootstrap (Bootstrap 6)
  *   --ref <ref>        branch or tag, instead of a named template
+ *   --emdash           add the EmDash CMS (forces server rendering)
+ *   --no-emdash        skip the EmDash prompt
  *   --no-install       skip installing dependencies
  *   --no-git           skip git init
  */
@@ -15,6 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createInterface } from "node:readline/promises";
+import { fileURLToPath } from "node:url";
 import { downloadTemplate } from "giget";
 
 const REPO = "github:kreativan/agentic-astro-website";
@@ -38,6 +41,8 @@ Templates:
 Options:
   --template <name>  ${Object.keys(TEMPLATES).join(" | ")} (default: default)
   --ref <ref>        branch or tag, instead of --template
+  --emdash           add the EmDash CMS and switch the project to server rendering
+  --no-emdash        do not add EmDash, and do not ask
   --no-install       skip installing dependencies
   --no-git           skip git init
   -h, --help         show this help
@@ -45,13 +50,15 @@ Options:
 `;
 
 function parseArgs(argv) {
-  const args = { dir: null, ref: null, template: null, install: true, git: true };
+  const args = { dir: null, ref: null, template: null, emdash: null, install: true, git: true };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "-h" || arg === "--help") args.help = true;
     else if (arg === "-v" || arg === "--version") args.version = true;
     else if (arg === "--no-install") args.install = false;
     else if (arg === "--no-git") args.git = false;
+    else if (arg === "--emdash") args.emdash = true;
+    else if (arg === "--no-emdash") args.emdash = false;
     else if (arg === "--template") args.template = argv[++i];
     else if (arg === "--ref") args.ref = argv[++i];
     else if (!arg.startsWith("-") && !args.dir) args.dir = arg;
@@ -95,6 +102,14 @@ async function askTemplate() {
   return answer;
 }
 
+async function askEmDash() {
+  if (!process.stdin.isTTY) return false;
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  const answer = (await rl.question("\nAdd EmDash CMS? This switches the site to server rendering. (y/N) ")).trim().toLowerCase();
+  rl.close();
+  return answer === "y" || answer === "yes";
+}
+
 function isEmptyDir(dir) {
   return !fs.existsSync(dir) || fs.readdirSync(dir).length === 0;
 }
@@ -124,6 +139,143 @@ function createEnv(dir) {
 }
 
 // Claude Code reads .claude/skills, Codex and Cursor read .agents/skills: keep one copy, linked.
+const EMDASH_CONFIG = `import { defineConfig, envField } from 'astro/config';
+import { loadEnv } from "vite";
+import node from '@astrojs/node';
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+import emdash, { local } from 'emdash/astro';
+import { sqlite } from 'emdash/db';
+
+// Config can't import astro:env, so read the values it needs from .env directly
+const { SITE_URL } = loadEnv(process.env, process.cwd(), "");
+
+export default defineConfig({
+  site: SITE_URL || 'http://localhost:4321',
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
+
+  devToolbar: {
+    enabled: false
+  },
+
+  env: {
+    schema: {
+      SITE_LANG: envField.string({ context: 'server', access: 'public', default: 'en' }),
+      SITE_NAME: envField.string({ context: 'server', access: 'public', default: 'Agentic Astro Website' }),
+      SITE_DESCRIPTION: envField.string({ context: 'server', access: 'public', default: '' }),
+      SITE_IMAGE: envField.string({ context: 'server', access: 'public', default: '' }),
+    },
+  },
+
+  integrations: [
+    react(),
+    emdash({
+      database: sqlite({ url: 'file:./data.db' }),
+      storage: local({
+        directory: './uploads',
+        baseUrl: '/_emdash/api/media/file',
+      }),
+    }),
+    sitemap({
+      filter: (page) => {
+        const exclude = ['/guidelines/'];
+        return !exclude.some(path => page.includes(path));
+      }
+    }),
+  ],
+});
+`;
+
+const LIVE_CONFIG = `import { defineLiveCollection } from "astro:content";
+import { emdashLoader } from "emdash/runtime";
+
+export const collections = {
+  _emdash: defineLiveCollection({ loader: emdashLoader() }),
+};
+`;
+
+const EMDASH_AGENTS = `
+## EmDash
+
+This project uses [EmDash](https://emdashcms.com/). The admin is at \`/_emdash/admin\`. Query content at request time with \`getEmDashCollection()\` and \`getEmDashEntry()\` from \`emdash\`. Render body content with \`PortableText\` from \`emdash/ui\`.
+
+The database is \`data.db\`. Uploads are in \`uploads/\`. Do not commit those, or \`EMDASH_ENCRYPTION_KEY\`.
+`;
+
+function lineBreak(text) {
+  return text.includes("\r\n") ? "\r\n" : "\n";
+}
+
+function editLines(file, drop) {
+  if (!fs.existsSync(file)) return;
+  const text = fs.readFileSync(file, "utf8");
+  const nl = lineBreak(text);
+  const next = text.split(/\r?\n/).filter((line) => !drop(line)).join(nl);
+  if (next !== text) fs.writeFileSync(file, next);
+}
+
+function replaceOnce(file, from, to) {
+  if (!fs.existsSync(file)) return;
+  const text = fs.readFileSync(file, "utf8");
+  if (!text.includes(from)) return;
+  fs.writeFileSync(file, text.replace(from, to));
+}
+
+function enableEmDash(dir) {
+  fs.writeFileSync(path.join(dir, "astro.config.mjs"), EMDASH_CONFIG);
+  fs.writeFileSync(path.join(dir, "src", "live.config.ts"), LIVE_CONFIG);
+
+  for (const name of [".env", ".env.example"]) {
+    editLines(path.join(dir, name), (line) => line === "ASTRO_SSR=0" || line.startsWith("# 1 = SSR with the Node adapter"));
+  }
+
+  const ignore = path.join(dir, ".gitignore");
+  const ignoreText = fs.readFileSync(ignore, "utf8");
+  if (!ignoreText.includes("data.db")) {
+    fs.writeFileSync(ignore, `${ignoreText.trimEnd()}\n\n# EmDash\ndata.db*\nuploads/\n`);
+  }
+
+  const agents = path.join(dir, "AGENTS.md");
+  editLines(agents, (line) => line.includes("| `ASTRO_SSR` |"));
+  if (fs.existsSync(agents) && !fs.readFileSync(agents, "utf8").includes("## EmDash")) {
+    const text = fs.readFileSync(agents, "utf8");
+    const nl = lineBreak(text);
+    fs.writeFileSync(agents, text.replace(`${nl}## Conventions${nl}`, `${nl}${EMDASH_AGENTS.trim()}${nl}${nl}## Conventions${nl}`));
+  }
+
+  replaceOnce(
+    path.join(dir, "README.md"),
+    "- **Static or SSR:** static by default, SSR with the Node adapter when `ASTRO_SSR=1`.",
+    "- **Rendering:** server output with the Node adapter. The EmDash admin is at `/_emdash/admin`.",
+  );
+  editLines(path.join(dir, "README.md"), (line) => line.includes("| `ASTRO_SSR` |"));
+  replaceOnce(
+    path.join(dir, "README.md"),
+    "| `npm run start` | Run the SSR build (`ASTRO_SSR=1`) on `0.0.0.0:4321` |",
+    "| `npm run start` | Run the production server on `0.0.0.0:4321` |",
+  );
+  replaceOnce(
+    path.join(dir, ".agents", "skills", "project-handoff", "SKILL.md"),
+    "`ASTRO_SSR`",
+    "`EMDASH_ENCRYPTION_KEY`",
+  );
+}
+
+function installEmDash(dir, pm) {
+  const packages = ["emdash", "@astrojs/react", "react", "react-dom"];
+  const command = { npm: ["install"], pnpm: ["add"], yarn: ["add"], bun: ["add"] }[pm] ?? ["install"];
+  console.log(`\nAdding EmDash with ${pm}…`);
+  if (!run(pm, [...command, ...packages], dir)) {
+    console.warn(`  Install failed. Run "${pm} ${command[0]} ${packages.join(" ")}" yourself.`);
+    return;
+  }
+  const bin = path.join(dir, "node_modules", ".bin", "emdash");
+  if (!run(bin, ["secrets", "generate", "--write", ".env"], dir)) {
+    console.warn("  Could not write EMDASH_ENCRYPTION_KEY. Run `npx emdash secrets generate --write .env`.");
+  }
+}
+
 function linkSkills(dir) {
   const source = path.join(dir, ".agents", "skills");
   const link = path.join(dir, ".claude", "skills");
@@ -151,6 +303,7 @@ async function main() {
   const dir = path.resolve(dirName);
   const name = path.basename(dir);
   const ref = args.ref ?? templateRef(args.template ?? (await askTemplate()));
+  const emdash = args.emdash ?? (await askEmDash());
 
   if (!isEmptyDir(dir)) {
     throw new Error(`${dirName} already exists and is not empty.`);
@@ -166,9 +319,11 @@ async function main() {
   setPackageName(dir, name);
   createEnv(dir);
   linkSkills(dir);
+  if (emdash) enableEmDash(dir);
 
   const pm = packageManager();
-  if (args.install) {
+  if (args.install && emdash) installEmDash(dir, pm);
+  else if (args.install) {
     console.log(`\nInstalling dependencies with ${pm}…`);
     if (!run(pm, ["install"], dir)) console.warn(`  Install failed. Run "${pm} install" yourself.`);
   }
@@ -185,14 +340,22 @@ async function main() {
 Done. Next steps:
 
   cd ${relative}
-  ${args.install ? "" : `${pm} install\n  `}${pm} run dev
+  ${args.install ? "" : `${pm} install${emdash ? " emdash @astrojs/react react react-dom" : ""}\n  ${emdash ? "npx emdash secrets generate --write .env\n  " : ""}`}${pm} run dev
 
 Fill in .env (SITE_URL, SITE_NAME, …), then ask your agent to build the site.
-It will follow AGENTS.md and the build-site skill.
+It will follow AGENTS.md and the build-site skill.${emdash ? `
+
+EmDash is installed. Run the dev server, then open /_emdash/admin
+and finish the setup wizard (site, account, passkey).` : ""}
 `);
 }
 
-main().catch((error) => {
-  console.error(`\n${error.message}`);
-  process.exit(1);
-});
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isDirectRun) {
+  main().catch((error) => {
+    console.error(`\n${error.message}`);
+    process.exit(1);
+  });
+}
+
+export { enableEmDash };

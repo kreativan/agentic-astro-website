@@ -20,10 +20,10 @@ An Astro 7 starter for marketing sites, set up to be built and maintained with A
 
 ```bash
 npx create-agentic-astro-website my-site
-npx create-agentic-astro-website my-site --template bootstrap
+npx create-agentic-astro-website my-site --template bootstrap --emdash
 ```
 
-With no `--template`, it asks you to pick one. `default` is this branch (plain CSS). `bootstrap` is the Bootstrap 6 branch. The command downloads that branch, creates `.env`, installs dependencies and makes the first commit. See [`create/README.md`](create/README.md). The CLI lives in `create/` and is not copied into new projects.
+With no `--template`, it asks you to pick one. `default` is this branch (plain CSS). `bootstrap` is the Bootstrap 6 branch. It then asks whether to add [EmDash](https://emdashcms.com/). EmDash switches that project to server rendering and removes `ASTRO_SSR`. The command downloads the chosen branch, creates `.env`, installs dependencies and makes the first commit. See [`create/README.md`](create/README.md). The CLI lives in `create/` and is not copied into new projects.
 
 ## Getting started (this repo)
 
