@@ -22,7 +22,7 @@ An Astro 7 starter for marketing sites, set up to be built and maintained with A
 npx create-agentic-astro-website my-site --template bootstrap --emdash
 ```
 
-This downloads the starter, creates `.env`, installs dependencies and makes the first commit. `--template` is `default` (plain CSS, the `main` branch) or `bootstrap` (this branch). It then asks whether to add EmDash, which switches that project to server rendering and removes `ASTRO_SSR`. See [`create/README.md`](create/README.md). The CLI lives in `create/` and is not copied into new projects.
+This downloads the starter, creates `.env` and installs dependencies. It does not create a Git repository unless you pass `--git`. `--template` is `default` (plain CSS, the `main` branch) or `bootstrap` (this branch). It then asks whether to add EmDash, which switches that project to server rendering and removes `ASTRO_SSR`. See [`create/README.md`](create/README.md). The CLI lives in `create/` and is not copied into new projects.
 
 ## Getting started (this repo)
 

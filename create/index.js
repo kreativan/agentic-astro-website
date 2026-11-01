@@ -11,7 +11,7 @@
  *   --emdash           add the EmDash CMS (forces server rendering)
  *   --no-emdash        skip the EmDash prompt
  *   --no-install       skip installing dependencies
- *   --no-git           skip git init
+ *   --git              run git init and make the first commit
  */
 import fs, { realpathSync } from "node:fs";
 import path from "node:path";
@@ -44,19 +44,19 @@ Options:
   --emdash           add the EmDash CMS and switch the project to server rendering
   --no-emdash        do not add EmDash, and do not ask
   --no-install       skip installing dependencies
-  --no-git           skip git init
+  --git              run git init and make the first commit
   -h, --help         show this help
   -v, --version      show the version
 `;
 
 function parseArgs(argv) {
-  const args = { dir: null, ref: null, template: null, emdash: null, install: true, git: true };
+  const args = { dir: null, ref: null, template: null, emdash: null, install: true, git: false };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "-h" || arg === "--help") args.help = true;
     else if (arg === "-v" || arg === "--version") args.version = true;
     else if (arg === "--no-install") args.install = false;
-    else if (arg === "--no-git") args.git = false;
+    else if (arg === "--git") args.git = true;
     else if (arg === "--emdash") args.emdash = true;
     else if (arg === "--no-emdash") args.emdash = false;
     else if (arg === "--template") args.template = argv[++i];

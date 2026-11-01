@@ -11,7 +11,7 @@ npm create agentic-astro-website@latest my-site -- --template bootstrap
 
 With no `--template` and no `--ref`, it asks you to pick one. Non-interactive runs use `default`. It then asks whether to add EmDash, unless you pass `--emdash` or `--no-emdash`. Non-interactive runs skip EmDash unless you pass `--emdash`.
 
-It downloads that branch of the starter, sets the package name, creates `.env` from `.env.example`, links `.claude/skills` to `.agents/skills`, installs dependencies and makes the first git commit.
+It downloads that branch of the starter, sets the package name, creates `.env` from `.env.example`, links `.claude/skills` to `.agents/skills`, and installs dependencies. It does not create a Git repository. Pass `--git` to run `git init` and make the first commit.
 
 ## Templates
 
@@ -31,7 +31,7 @@ A new variant is a branch plus one entry in `TEMPLATES` in `index.js`. Publish t
 | `--emdash` | Add EmDash and switch the project to server rendering |
 | `--no-emdash` | Do not add EmDash, and do not ask |
 | `--no-install` | Skip installing dependencies |
-| `--no-git` | Skip `git init` |
+| `--git` | Run `git init` and make the first commit |
 | `-h`, `--help` | Show help |
 | `-v`, `--version` | Show the version |
 
