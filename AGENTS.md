@@ -122,8 +122,8 @@ Skills live in `.agents/skills/`. `.claude/skills` is a symlink to it, so edit o
 
 When every page is built and `astro build` passes, the build is not done yet. Run the [project-handoff](.agents/skills/project-handoff/SKILL.md) skill. It covers:
 
-- Writing `DESIGN.md`: tokens, typography, layout, components and rules.
-- Building the internal style guide at `src/pages/guidelines/`, with its sections in `src/components/guidelines/`. It shows live component examples, snippets and usage notes.
+- Writing `DESIGN.md`: the site's style (colors, type, space, surfaces, motion), its few shared building blocks, and recipes for a new page and a new section.
+- Building the internal style guide at `src/pages/guidelines/`, with its chapters in `src/components/guidelines/`. It shows the same thing live, so new pages and sections match the site.
 - Creating project skills for repeatable, project-specific tasks, when they are needed.
 - Rewriting this file (`AGENTS.md`) so it describes the finished project.
 

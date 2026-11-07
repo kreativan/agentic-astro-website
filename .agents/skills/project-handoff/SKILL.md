@@ -1,291 +1,199 @@
 ---
 name: project-handoff
 description: >-
-  Final step after building or converting a site on this Astro starter. Turns
-  the finished project into documentation for developers and agents: writes
-  DESIGN.md, builds a /guidelines/ style guide page with live component
-  examples, adds project skills where they are needed, and rewrites AGENTS.md
+  Final step after building or converting a site on this Astro starter. Writes
+  down the site's style so the next developer or agent can build new pages and
+  sections that look like they belong: DESIGN.md (direction, colors, type,
+  spacing, surfaces, motion, building blocks, page and section recipes), a
+  /guidelines/ page that shows the same thing live, and an AGENTS.md rewritten
   for this project. Use when the site build is done, when the user asks to
-  "hand off", "document", or "finalize" the project, or asks for a style
-  guide, design system doc, DESIGN.md or guidelines page. Re-run it after large
-  design or component changes.
+  "hand off", "document" or "finalize" the project, or asks for a style guide,
+  design system doc, DESIGN.md or guidelines page. Re-run it after a large
+  redesign.
 ---
 
 # Project handoff
 
-Run this once every page is built and `astro build` passes. The goal is that
-the next developer or agent can extend the site without reverse-engineering
-it.
+The goal is one thing: someone who has never seen this site can add a new
+page or section, and it looks like it was always there.
 
-You produce four things, in this order:
+So document the **style and the rules**, not every file. A short guide that
+people read beats a complete catalogue that nobody does. Skip anything a
+developer learns by opening the component.
 
-1. `DESIGN.md`: the written design system (source of truth).
-2. The guidelines page: `/guidelines/`, the visual, live version of `DESIGN.md`.
-3. Project skills: only where they are needed.
-4. `AGENTS.md`: rewritten for this project, pointing at all of the above.
+You produce, in this order:
 
-Write the docs from the code. Do not document anything the code does not do,
-and drop any section below that the project has nothing for. If the code and
-the design disagree, document the code and tell the user about the mismatch.
+1. `DESIGN.md`: the written style guide (source of truth).
+2. `/guidelines/`: one page that shows `DESIGN.md` live.
+3. Project skills, only if a repeatable task needs one.
+4. `AGENTS.md`, rewritten for this project.
 
-## 1. Audit the project
+Write from the code. Don't document anything the code doesn't do. If the code
+and the design disagree, document the code and tell the user.
 
-Before writing anything, inventory what was actually built:
+## 1. Look at what was built
 
-- **Pages:** every route in `src/pages/` and the sections each one uses.
-- **Layout:** `src/layouts/Layout.astro` and its props (`title`,
-  `description`, `scripts`, `styles`, `noindex`), plus any other layouts.
-- **Components:** everything in `src/components/global/`, `ui/` and
-  `<page>/`. For each one, note its props, its variants, and which pages use it.
-  Include components from any npm package the site imports.
-- **Tokens:** colors, font families, type scale, spacing, radii, shadows,
-  breakpoints, container widths, z-index, transitions. On this variant, start
-  with Bootstrap's `--bs-*` variables and theme classes, then
-  `src/assets/scss/style.scss`. Also look for tokens defined elsewhere: other
-  CSS custom properties, Tailwind `@theme` or config, SCSS variables, and
-  stylesheets carried over from a converted site. Remove starter extras the
-  site never uses, and ask before deleting anything else.
-- **Assets:** fonts (`src/assets/fonts/`), icons and SVGs, images, and
-  third-party CSS and JS in `public/`.
-- **Behavior:** helpers in `src/lib/`, sliders, modals, animations, forms
-  (submito, see the [submito skill](../submito/SKILL.md)), and external
-  scripts.
-- **Config:** `astro.config.mjs` (output mode, adapter, integrations, sitemap
-  filter, `env.schema`), `tsconfig.json` aliases, and every env var
-  (`SITE_URL`, `SITE_LANG`, `SITE_NAME`, `SITE_DESCRIPTION`, `SITE_IMAGE`,
-  `ASTRO_SSR`, and any added later). Check that `.env.example` lists them all.
-  Document variable names, never their values.
-- **i18n (if any):** where translations live, the key naming pattern, and the
-  supported languages.
+Spend a short pass, not an inventory:
 
-Hard-coded values that repeat (the same hex code in 5 files, for example) are
-de facto tokens. Document them. Ask the user before refactoring them into
-variables.
+- **Tokens:** on this variant, start with Bootstrap's theme: the `--bs-*` variables and the Sass overrides in `src/assets/scss/style.scss`, then any custom properties the site added. Bootstrap components count as building blocks: document how this site uses and styles them, not Bootstrap itself. Note colors, fonts, type scale, spacing, radii,
+  shadows, breakpoints and the container width. Hard-coded values that repeat
+  across files are tokens in disguise: list them and ask the user before
+  turning them into variables.
+- **The look:** open the home page and two or three other pages. What makes
+  them recognisable? Background bands, heading style, card style, how images
+  or illustrations are done, how much white space, what moves.
+- **Building blocks:** the 4–8 pieces that sections are made of again and
+  again (button, eyebrow, section heading, card, CTA panel, image or
+  illustration frame). Ignore one-off components.
+- **Page skeleton:** how a page is put together (`Layout`, the order of
+  sections, how backgrounds alternate) and how a section is put together
+  (container, heading, content grid).
+- **Config that affects new pages:** env vars (`SITE_URL`, `SITE_LANG`,
+  `SITE_NAME`, `SITE_DESCRIPTION`, `SITE_IMAGE`, `ASTRO_SSR` and any added
+  later; names only, never values), the sitemap filter, and any page list
+  that feeds meta, llms.txt or schema.
 
 ## 2. Write DESIGN.md
 
-Create `DESIGN.md` in the repo root. Agents read this file instead of the CSS,
-so make it exact: token names, real values, real import paths. Use this
-structure and drop sections the project has nothing for:
+Aim for 150–300 lines. Real token names and values, real import paths, short
+sentences. Drop any section the site has nothing for.
 
 ```md
-# <Brand> Design System
+# <Brand> Design
 
-> Live examples: /guidelines/ (dev: http://localhost:4321/guidelines/)
+> Live: /guidelines/ (dev: http://localhost:4321/guidelines/)
 
 ## Direction
-2–4 sentences: the visual tone, what the design is trying to feel like,
-and what to avoid.
+2–4 sentences: what the site should feel like, and what to avoid.
 
 ## Colors
 | Token | Value | Use for |
-|-------|-------|---------|
-| `--color-primary` | `#0B5FFF` | CTAs, links, active states |
-
-Approved text/background pairs (with WCAG contrast ratio).
+Brand colors first, then neutrals, then state colors (success, warning).
+Which text/background pairs are allowed (with contrast ratio), and which
+are not.
 
 ## Typography
-Families (and where each is loaded), weights in use, and the type scale as a
-table: role (h1…h6, body, small, eyebrow, button) → size / line-height /
-weight / letter-spacing / class or element.
+Font families and where they load. The scale as a table:
+role (h1, h2, h3, lead, body, small, eyebrow, button) → token or size /
+weight / line-height. One line on how headings are written (case, full stop).
 
-## Layout & spacing
-Spacing scale, container widths, grid, section padding, and breakpoints (name →
-min-width).
+## Space & layout
+Spacing scale, container width and side padding, section padding, grid
+gaps, breakpoints. How section backgrounds alternate.
 
 ## Surfaces
-Radii, borders, shadows, overlays.
+Radius, borders, shadows (when, and when not), overlays.
 
 ## Imagery & icons
-Where icons live and how to add one. Image aspect ratios, which image
-component to use (`<Image />` / `<Picture />` from `astro:assets`, or the
-project's own wrapper), and alt-text rules.
+Photos, illustrations or neither; aspect ratios; where icons live and how to
+add one; alt-text rule.
 
 ## Motion
-Durations, easings, what animates, and how reduced-motion is handled.
+What moves, durations and easing, reduced-motion handling.
 
-## Components
-One entry per reusable component:
-### Button — `@src/components/ui/Button.astro`
-- When to use / when not to
-- Props: name, type, default, description
-- Variants and states
-- Example (copy-paste Astro snippet)
-- Guidelines anchor: /guidelines/#button
+## Building blocks
+The 4–8 shared pieces only. For each: one line on when to use it, the import
+or class, and a copy-paste snippet. No props tables unless a prop changes
+the look.
 
-## Section patterns
-The page sections (hero, feature grid, CTA band…), their files, and how to
-compose a new page from them.
+## New page
+Step by step: route file, page meta (title, description, page list if the
+site has one), Layout, sections, header/footer links. A skeleton snippet.
 
-## Forms
-Field markup, error and busy styles, and which endpoint each form posts to.
-Link the submito skill for wiring.
-
-## Accessibility
-Focus styles, minimum target size, contrast rules, landmark structure, and
-anything the components handle for you.
+## New section
+Step by step: component file and folder, `<section>` with the right
+background, container, heading block, content grid, aria-labelledby, mobile
+check. A skeleton snippet. When to make a new block vs reuse one.
 
 ## Do / Don't
-Short, concrete rules that come from this design.
+6–12 short, concrete rules that come from this design.
 ```
 
 ## 3. Build the guidelines page
 
-The guidelines page is the live version of `DESIGN.md`. It renders the **real**
-components with the **real** tokens, so it cannot drift from the site.
+`/guidelines/` is `DESIGN.md` you can look at. Same chapters, same order,
+same anchors. It renders the real tokens and the real building blocks, so it
+can't drift from the site.
 
 ### Files
 
 ```
-src/pages/guidelines/index.astro          # composes the sections below
+src/pages/guidelines/index.astro        # composes the chapters
 src/components/guidelines/
-  GuidelinesNav.astro                     # sticky table of contents (anchors)
-  Example.astro                           # shared: title, notes, live preview slot, code
-  PropsTable.astro                        # shared: props table from an array
+  GuidelinesNav.astro                   # sticky list of chapters (anchors)
   Colors.astro
   Typography.astro
-  Spacing.astro
-  Surfaces.astro
-  Icons.astro
-  Motion.astro
-  components/Components.astro             # one Example per ui/ and global/ component
-  sections/Sections.astro                 # page sections, rendered in place
-  Forms.astro
-  Accessibility.astro
+  Space.astro                           # spacing scale, container, section rhythm
+  Surfaces.astro                        # radius, borders, shadows, motion
+  Blocks.astro                          # the shared building blocks, live
+  Recipes.astro                         # new page / new section, with one example section
+  DosDonts.astro
 ```
 
-Follow the AGENTS.md component rules: one section per file, and a folder for a
-section that has subcomponents. If the page gets long (more than ~15
-components), split it into routes: `src/pages/guidelines/index.astro`
-(foundations), `components.astro`, `sections.astro`, with `GuidelinesNav`
-linking them.
+Merge or drop chapters to match `DESIGN.md`. Keep it one page.
 
 ### Rules
 
-- **Use the real components.** Import from `@src/components/...`. Never copy a
-  component's markup into the guidelines page.
-- **Data arrays + `.map()`.** Define the tokens and examples as arrays at the
-  top of each file. A component reference can go in the array:
+- **Show, then say.** Each chapter: a live example, one or two lines of
+  rules, and a snippet where it helps. No long prose.
+- **Real tokens.** Swatches and scales render from the CSS variables
+  (`` style={`background: var(${token.name})`} ``). Never type a value twice;
+  if you show computed values, read them with `getComputedStyle` in a helper
+  in `src/lib/`.
+- **Real blocks.** Import the building blocks from `@src/components/...` or
+  use the real classes. Never copy their markup into the guide.
+- **Recipes are live.** Render one example section built the way the
+  "New section" recipe says, and label its parts (background, container,
+  heading, grid). Show the page skeleton as a snippet.
+- **Data arrays + `.map()`** for swatches, scales and examples, defined at
+  the top of each file.
+- **Keep it private:** `<Layout title="Guidelines" noindex>`, excluded in the
+  sitemap filter in `astro.config.mjs`, disallowed in robots.txt if the site
+  has one, and not linked from the header or footer.
+- **Style it like the site,** scoped to `src/components/guidelines/`. Guide
+  styles must not leak into site components.
+- English, plain strings.
 
-  ```astro
-  ---
-  import { Code } from "astro:components";
-  import Example from "@src/components/guidelines/Example.astro";
-  import Button from "@src/components/ui/Button.astro";
+## 4. Project skills (only if needed)
 
-  const examples = [
-    {
-      id: "button-primary",
-      title: "Primary button",
-      notes: "One per view. Main call to action.",
-      Component: Button,
-      props: { variant: "primary", href: "#" },
-      label: "Get started",
-      code: `<Button variant="primary" href="/signup">Get started</Button>`,
-    },
-  ];
-  ---
+Add one only for a repeatable, multi-step task an agent would likely get
+wrong: adding a page of a recurring type, adding a language, wiring a custom
+slider or CMS block. Skip it when the "New page" and "New section" recipes
+already cover it.
 
-  {examples.map(({ id, title, notes, Component, props, label, code }) => (
-    <Example id={id} title={title} notes={notes}>
-      <Component {...props}>{label}</Component>
-      <Code slot="code" code={code} lang="astro" />
-    </Example>
-  ))}
-  ```
-
-- **Tokens render from CSS variables.** Color swatches use
-  `` style={`background: var(${token.name})`} ``. If you show resolved values, read
-  them in the browser with `getComputedStyle` from a helper in
-  `src/lib/guidelines.ts`. Do not type the values twice.
-- **Show every variant and state** a component supports: sizes, colors,
-  disabled, loading, error, hover/focus (describe or force with a class), plus
-  long-text and empty cases.
-- **Each component example shows:** a live preview, its import path, a props
-  table, a copy-paste snippet, and when to use or avoid it. Match the
-  `DESIGN.md` entry and use the same anchor id (`/guidelines/#button`).
-- **Forms:** show the fields and their states (default, error with
-  `.error-message` and `aria-invalid`, busy). Do not bind a form that posts to
-  a real endpoint. Leave it unbound, or point it at a dummy `action`, and say
-  why on the page.
-- **English only.** The page is internal, so its copy is plain strings, even
-  if the site is translated.
-- **Keep it out of search:**
-  - Render the page with `<Layout title="Guidelines" noindex>`.
-  - Keep `/guidelines/` in the sitemap `exclude` list in `astro.config.mjs`.
-  - Do not link the page from the site's header or footer.
-- **Page chrome:** style the page in the project's own design language,
-  scoped to `src/components/guidelines/`. Guideline-only styles must not leak
-  into site components.
-
-## 4. Create project skills (only if needed)
-
-Add a skill only for a **repeatable, multi-step, project-specific** task that an
-agent would likely get wrong without guidance. Examples:
-
-- Adding a new landing page from the existing section patterns.
-- Adding a language (translations, locale routing, per-locale assets).
-- A custom slider, pricing table or CMS-driven block with non-obvious wiring.
-- A design-specific animation system.
-
-Skip it when a rule in AGENTS.md or an entry in `DESIGN.md` is enough, or when
-the task is a one-off. Do not duplicate installed third-party skills (such as
-`submito` or `frontend-design`); link them instead.
-
-Format, matching the existing skills:
-
-```md
----
-name: kebab-case-name
-description: >-
-  What it does and exactly when to use it (trigger phrases). This text is
-  what agents match on, so be specific.
----
-
-# Title
-Context, then steps, rules, a reference snippet, and a checklist.
-```
-
-- Write each skill to `.agents/skills/<name>/SKILL.md`. `.claude/skills` is a
-  symlink to `.agents/skills`, so do not create files there.
-- Link `DESIGN.md` and the other skills instead of repeating them.
-- Put long reference material in `references/*.md` next to `SKILL.md`.
+Write it to `.agents/skills/<name>/SKILL.md` (`.claude/skills` is a symlink
+to it). Link `DESIGN.md` and other skills instead of repeating them. Don't
+duplicate installed skills (`submito`, `frontend-design`, `plain-voice`).
 
 ## 5. Rewrite AGENTS.md
 
-Rewrite `AGENTS.md` so it describes **this project**, not the blank starter.
-Keep it short; detail goes in `DESIGN.md` and the skills.
+Keep it short; detail lives in `DESIGN.md`.
 
-- **Keep and update:** Development, Project, Environment (add any new vars),
-  Conventions, Styling, Head & SEO, Verify, and Documentation.
-- **Add:**
-  - A **Project overview**: brand, purpose, the page list with routes, and
-    anything unusual (SSR, external content, external scripts).
-  - **Design**: "Read `DESIGN.md` before changing UI. Live examples at
-    `/guidelines/`."
-  - **Where things are**: real paths for fonts, icons, images and `src/lib/`
-    helpers, beyond what Styling already lists.
-  - **Keeping docs in sync**: "When you add or change a component, token or
-    section, update `DESIGN.md` and its `/guidelines/` example in the same
-    change."
-- **Skills table:** add every project skill you created, and remove
-  `build-site` and the "Starting a new site" section. The site is built.
-- **Replace** the "Finishing a build" section: say that handoff has been done
-  and that agents should re-run this skill after large redesigns.
+- **Project overview:** brand, purpose, routes, anything unusual (SSR,
+  external content, external scripts).
+- **Design:** "Read `DESIGN.md` before changing UI. Live at `/guidelines/`."
+- **Where things are:** fonts, icons, images, `src/lib/` helpers.
+- **Keep docs in sync:** "When you change a token, a building block or the
+  page/section recipe, update `DESIGN.md` and `/guidelines/` in the same
+  change."
+- **Skills table:** add new project skills; remove `build-site` and the
+  "Starting a new site" section.
+- **Replace "Finishing a build"** with: handoff is done; re-run this skill
+  after a large redesign.
+- Keep Development, Environment, Conventions, Styling, Head & SEO, Verify and
+  Documentation, updated for this project.
 
 ## 6. Verify
 
-- [ ] `astro build` passes with no new warnings
-- [ ] `/guidelines/` renders in the dev server (`astro dev --background`),
-      every example shows, and there are no console errors
-- [ ] The page has `noindex` and does not appear in `dist/sitemap-*.xml`
-- [ ] Every component in `src/components/ui/` and `global/` has an entry in
-      both `DESIGN.md` and `/guidelines/`, with matching anchors
+- [ ] Someone could build a new section from `DESIGN.md` alone: tokens,
+      blocks and the section recipe are all there
 - [ ] Every token in `DESIGN.md` exists in the code with the same value
-- [ ] Every path, import and skill link in `AGENTS.md` / `DESIGN.md` resolves
-- [ ] No env var values or secrets appear in `DESIGN.md` or `AGENTS.md`
-- [ ] New skills are in `.agents/skills/`, and `.claude/skills` is still a symlink
-- [ ] `npm run check` passes
+- [ ] `/guidelines/` renders in the dev server with no console errors, and
+      its chapters match `DESIGN.md`
+- [ ] `/guidelines/` is `noindex` and missing from `dist/sitemap-*.xml`
+- [ ] Every path and link in `AGENTS.md` and `DESIGN.md` resolves
+- [ ] No env var values or secrets in the docs
+- [ ] `npm run check` and `astro build` pass
 
-Finish with a short summary for the user: the files you created or changed,
-the skills you added (and why), and any design and code mismatches you found.
+Finish with a short summary: files written, skills added (and why), and any
+mismatches between design and code.
