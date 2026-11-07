@@ -111,6 +111,7 @@ Before reporting work as done:
 | [bootstrap-color-system](.agents/skills/bootstrap-color-system/SKILL.md) | Theme colors, color modes, and color tokens |
 | [bootstrap-utility-api](.agents/skills/bootstrap-utility-api/SKILL.md) | Adding, changing, or removing utility classes |
 | [submito](.agents/skills/submito/SKILL.md) | Adding or fixing a form |
+| [plain-voice](.agents/skills/plain-voice/SKILL.md) | Writing or rewriting any text people read: page copy, headlines, buttons, meta descriptions, emails, docs |
 | [project-handoff](.agents/skills/project-handoff/SKILL.md) | After the build is done, or after a large redesign |
 
 Bootstrap is already installed and loaded. Ignore [bootstrap-v6-install](.agents/skills/bootstrap-v6-install/SKILL.md) and [bootstrap-npm](.agents/skills/bootstrap-npm/SKILL.md). Ignore the new-project scaffold in [bootstrap-vite](.agents/skills/bootstrap-vite/SKILL.md). Bootstrap Sass is already loaded from `src/assets/scss/style.scss`.
