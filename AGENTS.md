@@ -101,6 +101,7 @@ Before reporting work as done:
 | [build-site](.agents/skills/build-site/SKILL.md) | Building a new site from scratch, from an example, or converting a site or URL |
 | [frontend-design](.agents/skills/frontend-design/SKILL.md) | Only when designing a new site from scratch. Ignore it when converting, following an example, or changing an existing design |
 | [submito](.agents/skills/submito/SKILL.md) | Adding or fixing a form |
+| [plain-voice](.agents/skills/plain-voice/SKILL.md) | Writing or rewriting any text people read: page copy, headlines, buttons, meta descriptions, emails, docs |
 | [project-handoff](.agents/skills/project-handoff/SKILL.md) | After the build is done, or after a large redesign |
 
 Skills live in `.agents/skills/`. `.claude/skills` is a symlink to it, so edit only `.agents/skills/`.
